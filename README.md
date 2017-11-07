@@ -10,4 +10,3 @@ This is a school project during which students have to create a VR project.
 
 * Quach Maurice
 * Fabien Boucaud
-- 
