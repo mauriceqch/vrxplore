@@ -12,6 +12,6 @@ public class ViveCameraSync : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        ViveSyncHelper.syncPosition(gameObject, VRNode.Head);
+        transform.localPosition = InputTracking.GetLocalPosition(VRNode.Head);
 	}
 }

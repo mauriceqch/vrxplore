@@ -12,6 +12,6 @@ public class ViveRightSync : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        ViveSyncHelper.syncPosition(gameObject, VRNode.RightHand);
+        ViveSyncHelper.syncPosition(transform, VRNode.RightHand);
     }
 }

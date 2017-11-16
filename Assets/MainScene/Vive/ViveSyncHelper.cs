@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.VR;
 
 public class ViveSyncHelper {
-    public static void syncPosition(GameObject o, VRNode node)
+    public static void syncPosition(Transform transform, VRNode node)
     {
-        o.transform.position = InputTracking.GetLocalPosition(node);
+        transform.localPosition = InputTracking.GetLocalPosition(node);
+        transform.localRotation = InputTracking.GetLocalRotation(node);
     }
 }
