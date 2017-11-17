@@ -93,7 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chainSpeed: 1000
-  attractionForce: 1000
+  attractionForce: 250
   hookPadding: 5
   destination: {x: 0, y: 0, z: 0}
   attractedObject: {fileID: 0}

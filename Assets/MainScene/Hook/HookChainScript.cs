@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,9 +28,10 @@ namespace Hook
         void FixedUpdate()
         {
             Transform playerTransform = attractedObject.transform;
-            if (Vector3.Distance(playerTransform.position, transform.position) > hookPadding)
+            float distance = Vector3.Distance(playerTransform.position, destination);
+            if (distance > hookPadding)
             {
-                attractedObject.GetComponent<Rigidbody>().AddForce((destination - playerTransform.position).normalized * attractionForce);
+                attractedObject.GetComponent<Rigidbody>().AddForce((destination - playerTransform.position).normalized * ((float) (1 - Math.Exp(-distance))) * attractionForce, ForceMode.Force);
             }
         }
     }
