@@ -92,5 +92,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dae160cc8279fd74686cdef9588d4b3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chainSpeed: 20
+  chainSpeed: 1000
+  attractionForce: 1000
+  hookPadding: 5
   destination: {x: 0, y: 0, z: 0}
+  attractedObject: {fileID: 0}
