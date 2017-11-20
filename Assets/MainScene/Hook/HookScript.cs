@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VR;
 using Hook;
 
 namespace Hook
@@ -24,6 +25,10 @@ namespace Hook
         // Update is called once per frame
         void Update()
         {
+			if (Input.GetButton("FireRight"))
+			{
+				Debug.Log ("FireRight detected");
+			}
             Transform spawnPointTransform = hookChainSpawnPoint.transform;
             Vector3 direction = transform.TransformDirection(Vector3.forward);
 
@@ -32,8 +37,7 @@ namespace Hook
             {
                 currentDotPointer.SetActive(true);
                 currentDotPointer.transform.position = hit.point;
-
-                if (Input.GetMouseButtonDown(0))
+				if (Input.GetButtonDown("FireRight"))
                 {
                     print("Raycast hit, distance : " + hit.distance + " pos : " + hit.point);
 
