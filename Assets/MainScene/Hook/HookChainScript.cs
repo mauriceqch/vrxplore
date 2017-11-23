@@ -36,8 +36,10 @@ namespace Hook
 
 				Vector3 massAttenuationForce = Vector3.up * 10 * ((float) (1 - Math.Exp(-distance)));
 
-				Vector3 stabilizationDirection = (destination - (playerTransform.position + rb.velocity)).normalized * attractionForce;
-				Vector3 stabilization = ((float)(Math.Exp (-distance))) * stabilizationDirection;
+				Vector3 stabilizationDirection = (destination - (playerTransform.position + rb.velocity)).normalized;
+				stabilizationDirection.Scale(stabilizationDirection);
+				stabilizationDirection.Scale(new Vector3 (1, 1, 0));
+				Vector3 stabilization = ((float)(Math.Exp (-distance))) * stabilizationDirection * attractionForce / 2;
 				rb.AddForce(attraction + stabilization + massAttenuationForce, ForceMode.Force);
 
             }
