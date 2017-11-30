@@ -478,6 +478,11 @@ Prefab:
       propertyPath: m_LocalScale.y
       value: 0.10000001
       objectReference: {fileID: 0}
+    - target: {fileID: 114509989652005740, guid: 8fc212e885c92c24e9b3a27774ee54f2,
+        type: 2}
+      propertyPath: side
+      value: Right
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8fc212e885c92c24e9b3a27774ee54f2, type: 2}
   m_IsPrefabParent: 0
@@ -835,7 +840,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c9795a96c094f4cbde4d65546aa9b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 0}
+  cam: {fileID: 1705285907}
   movementSettings:
     ForwardSpeed: 8
     BackwardSpeed: 4
@@ -1781,7 +1786,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1705285894}
   m_LocalRotation: {x: -0.013188267, y: -0.7112159, z: 0.004657334, w: -0.70283455}
-  m_LocalPosition: {x: -86.62, y: 6.2, z: 40.3}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 358608892}
