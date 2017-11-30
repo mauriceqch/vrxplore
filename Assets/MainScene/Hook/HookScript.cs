@@ -12,6 +12,7 @@ namespace Hook
         public GameObject chain;
         public GameObject dotPointer;
         public GameObject hookChainSpawnPoint;
+        public string side;
 
         private GameObject currentDotPointer;
         private GameObject currentChain;
@@ -22,26 +23,29 @@ namespace Hook
             currentDotPointer = Instantiate(dotPointer);
         }
 
+        void Print(string s)
+        {
+            MonoBehaviour.print("HookScript " + side + " " + s);
+        }
+
         // Update is called once per frame
         void Update()
         {
-			if (Input.GetButton("RightTrigger"))
-			{
-				Debug.Log ("FireRight detected");
-			}
-            Transform spawnPointTransform = hookChainSpawnPoint.transform;
+            debugInputs();
             Vector3 direction = transform.TransformDirection(Vector3.forward);
+            Transform spawnPointTransform = hookChainSpawnPoint.transform;
 
             RaycastHit hit;
             if (Physics.Raycast(spawnPointTransform.position, direction, out hit))
             {
-				print("Raycast hit, distance : " + hit.distance + " pos : " + hit.point);
+				Print("Raycast hit, distance : " + hit.distance + " pos : " + hit.point);
 
                 currentDotPointer.SetActive(true);
                 currentDotPointer.transform.position = hit.point;
 
-				if (Input.GetButtonDown("RightTrigger"))
+				if (Input.GetButtonDown(side + "Trigger"))
                 {
+                    Print("Chain launched");
                     if (currentChain != null)
                     {
                         Destroy(currentChain);
@@ -50,22 +54,24 @@ namespace Hook
                     createChain(hit);
                 }
 
-				if (Input.GetButtonDown("RightTrackpad"))
+				if (Input.GetButtonDown(side + "Trackpad"))
 				{
-					print ("Object push try");
+					Print ("Object push try");
 					Rigidbody rb = hit.rigidbody;
 					if (rb != null && hit.distance < 2) {
-						print ("Object pushed");
+						Print ("Object pushed");
 						rb.AddForce (direction.normalized * 10, ForceMode.Impulse);
 					} else {
-						print ("Object push fail");
+						Print ("Object push fail");
 					}
 					// attractedObject.GetComponent<Rigidbody> ().AddForce (-direction.normalized * 100, ForceMode.Impulse);
 				}
 
-				print(Input.GetAxisRaw ("RightGrip"));
-				//	print ("right grip pressed");
-				//}
+                if (Input.GetAxis(side + "Grip") == 1.0f)
+                {
+                    Print("Grip detected");
+
+                }
             }
             else
             {
@@ -81,6 +87,23 @@ namespace Hook
             HookChainScript hookChainScript = currentChain.GetComponent<HookChainScript>();
             hookChainScript.destination = hit.point;
             hookChainScript.attractedObject = attractedObject;
+        }
+
+        void debugInputs()
+        {
+
+            if (Input.GetButtonDown(side + "Trigger"))
+            {
+                Print("Trigger detected");
+            }
+            if (Input.GetButtonDown(side + "Trackpad"))
+            {
+                Print("Trackpad detected");
+            }
+            if (Input.GetAxis(side + "Grip") == 1.0f)
+            {
+                Print("Axis detected");
+            }
         }
     }
 }
