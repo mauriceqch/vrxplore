@@ -7,7 +7,7 @@ namespace Hook
 {
     public class HookChainScript : MonoBehaviour {
         public float chainSpeed = 1000;
-        public float attractionForce = 1000;
+        public float attractionForce = 500;
         public float hookPadding = 1;
 
         public Vector3 destination;

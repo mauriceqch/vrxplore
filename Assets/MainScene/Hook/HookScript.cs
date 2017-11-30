@@ -25,7 +25,7 @@ namespace Hook
         // Update is called once per frame
         void Update()
         {
-			if (Input.GetButton("FireRight"))
+			if (Input.GetButton("RightTrigger"))
 			{
 				Debug.Log ("FireRight detected");
 			}
@@ -35,12 +35,13 @@ namespace Hook
             RaycastHit hit;
             if (Physics.Raycast(spawnPointTransform.position, direction, out hit))
             {
+				print("Raycast hit, distance : " + hit.distance + " pos : " + hit.point);
+
                 currentDotPointer.SetActive(true);
                 currentDotPointer.transform.position = hit.point;
-				if (Input.GetButtonDown("FireRight"))
-                {
-                    print("Raycast hit, distance : " + hit.distance + " pos : " + hit.point);
 
+				if (Input.GetButtonDown("RightTrigger"))
+                {
                     if (currentChain != null)
                     {
                         Destroy(currentChain);
@@ -48,6 +49,23 @@ namespace Hook
 
                     createChain(hit);
                 }
+
+				if (Input.GetButtonDown("RightTrackpad"))
+				{
+					print ("Object push try");
+					Rigidbody rb = hit.rigidbody;
+					if (rb != null && hit.distance < 2) {
+						print ("Object pushed");
+						rb.AddForce (direction.normalized * 10, ForceMode.Impulse);
+					} else {
+						print ("Object push fail");
+					}
+					// attractedObject.GetComponent<Rigidbody> ().AddForce (-direction.normalized * 100, ForceMode.Impulse);
+				}
+
+				print(Input.GetAxisRaw ("RightGrip"));
+				//	print ("right grip pressed");
+				//}
             }
             else
             {
