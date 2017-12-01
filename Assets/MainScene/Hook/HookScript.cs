@@ -12,6 +12,7 @@ namespace Hook
         public GameObject chain;
         public GameObject dotPointer;
         public GameObject hookChainSpawnPoint;
+		public GameObject vibrationManager;
         public string side;
 
         private GameObject currentDotPointer;
@@ -70,7 +71,7 @@ namespace Hook
                 if (Input.GetAxis(side + "Grip") == 1.0f)
                 {
                     Print("Grip detected");
-
+					vibrationManager.GetComponent<OVRVibration>().VibrateController (side == "Right" ? VRNode.RightHand : VRNode.LeftHand, 1, 200);
                 }
             }
             else
