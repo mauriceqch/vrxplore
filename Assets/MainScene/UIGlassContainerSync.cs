@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 [InitializeOnLoad]
@@ -23,9 +24,16 @@ class UIGlassContainerSync
             Vector3 CanvasPosition = Canvas.transform.localPosition;
             Canvas.transform.localPosition = new Vector3(
                 CanvasPosition.x,
-                - (1 - UIGlassScale.y) / 2.0f,
-                (1 - UIGlassScale.z) / 2.0f
+                Round(- (1 - UIGlassScale.y) / 2.0f),
+                Round((1 - UIGlassScale.z) / 2.0f)
             );
         }
+    }
+
+    private static float Round(float f)
+    {
+        float result = Mathf.Round(f * 10.0f) / 10.0f;
+        // Debug.Log(result.ToString("F10"));
+        return result;
     }
 }
