@@ -16,7 +16,7 @@ namespace Hook
         public string side;
 
         private GameObject currentDotPointer;
-        private GameObject currentChain;
+        public GameObject currentChain;
 
         // Use this for initialization
         void Start()

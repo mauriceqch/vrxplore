@@ -33,7 +33,7 @@ class UIGlassContainerSync
     private static float Round(float f)
     {
         float result = Mathf.Round(f * 10.0f) / 10.0f;
-        // Debug.Log(result.ToString("F10"));
+        Debug.Log(result.ToString("F10"));
         return result;
     }
 }
