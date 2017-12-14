@@ -29,20 +29,29 @@ public class MinimapSync : MonoBehaviour {
 		} else {
 			mapPointer.SetActive (true);
 			Transform t = mapPointer.transform;
-			float x = calculateScaledPosition (transform.position.y, hookChain.transform.position.y);
-			float y = calculateScaledPosition (transform.position.z, hookChain.transform.position.z);
-			float theta = camera.transform.rotation.y;
+
+			// get eulerAngles and adjust to positive z axis (+180°)
+			// adjust angle to have right and left at the right place
+			// float theta = (90.0f - ((transform.rotation.eulerAngles.y + 180.0f) - 90.0f));
+			float theta = transform.rotation.eulerAngles.y;
+			theta = theta * Mathf.Deg2Rad;
+
+			float x = hookChain.transform.position.y - transform.position.y;
+			float y = hookChain.transform.position.z - transform.position.z;
+			float rotX = scaleDistance(Mathf.Cos (theta) * x - Mathf.Sin (theta) * y);
+			float rotY = scaleDistance(Mathf.Sin (theta) * x + Mathf.Cos (theta) * y);
+
 
 			t.localPosition = new Vector3 (
 				t.localPosition.x,
-				Mathf.Cos(theta) * x - Mathf.Sin(theta) * y,
-				Mathf.Sin(theta) * x + Mathf.Cos(theta) * y
+				rotX,
+				rotY
 			);
 		}
 	}
 
-	private float calculateScaledPosition(float origin, float position) {
-		return clamp((position - origin) / 500.0f);
+	private float scaleDistance(float distance) {
+		return clamp(distance / 500.0f);
 	}
 
 	private float clamp(float f) {
