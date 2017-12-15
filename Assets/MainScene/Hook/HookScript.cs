@@ -71,8 +71,11 @@ namespace Hook
                 if (Input.GetAxis(side + "Grip") == 1.0f)
                 {
                     Print("Grip detected");
-					vibrationManager.GetComponent<OVRVibration>().VibrateController (side == "Right" ? VRNode.RightHand : VRNode.LeftHand, 1, 200);
-                }
+					Rigidbody rb = hit.rigidbody;
+					if (rb != null && hit.distance <= 1) {
+						vibrationManager.GetComponent<OVRVibration> ().VibrateController (side == "Right" ? VRNode.RightHand : VRNode.LeftHand, 1, 200);
+					}
+				}
             }
             else
             {
@@ -104,6 +107,7 @@ namespace Hook
             if (Input.GetAxis(side + "Grip") == 1.0f)
             {
                 Print("Axis detected");
+
             }
         }
     }
