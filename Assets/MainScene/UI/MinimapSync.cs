@@ -30,22 +30,24 @@ public class MinimapSync : MonoBehaviour {
 			mapPointer.SetActive (true);
 			Transform t = mapPointer.transform;
 
-			// get eulerAngles and adjust to positive z axis (+180°)
-			// adjust angle to have right and left at the right place
-			// float theta = (90.0f - ((transform.rotation.eulerAngles.y + 180.0f) - 90.0f));
-			float theta = transform.rotation.eulerAngles.y;
+			float theta = camera.transform.rotation.eulerAngles.y;
 			theta = theta * Mathf.Deg2Rad;
+            // camera rotation cancel angle
+            theta = -theta;
 
-			float x = hookChain.transform.position.y - transform.position.y;
-			float y = hookChain.transform.position.z - transform.position.z;
-			float rotX = scaleDistance(Mathf.Cos (theta) * x - Mathf.Sin (theta) * y);
-			float rotY = scaleDistance(Mathf.Sin (theta) * x + Mathf.Cos (theta) * y);
+            // Minimap y : player camera direction (z), UI up direction
+            // Minimap z : player lateral direction (x), positive = right, negative = left
+			float zDiff = hookChain.transform.position.z - transform.position.z;
+			float xDiff = hookChain.transform.position.x - transform.position.x;
+            // Cancel camera rotation
+            float y = scaleDistance(Mathf.Cos(theta) * zDiff - Mathf.Sin(theta) * xDiff);
+            float z = scaleDistance(Mathf.Sin(theta) * zDiff + Mathf.Cos(theta) * xDiff);
 
-
+            // Project on minimap
 			t.localPosition = new Vector3 (
 				t.localPosition.x,
-				rotX,
-				rotY
+				y,
+				z
 			);
 		}
 	}
