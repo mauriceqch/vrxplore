@@ -32,14 +32,17 @@ namespace Hook
             if (distance > hookPadding)
             {
 				Rigidbody rb = attractedObject.GetComponent<Rigidbody> ();
-				Vector3 attraction = (destination - playerTransform.position).normalized * ((float) (1 - Math.Exp(-distance))) * attractionForce;
+
+				float velocity = rb.velocity.magnitude;
+
+				Vector3 attraction = (destination - playerTransform.position).normalized * ((float) (1 - Math.Exp(-Math.Sqrt(distance)))) * attractionForce;
 
 				Vector3 massAttenuationForce = Vector3.up * 10 * ((float) (1 - Math.Exp(-distance)));
 
 				Vector3 stabilizationDirection = (destination - (playerTransform.position + rb.velocity)).normalized;
-				stabilizationDirection.Scale(stabilizationDirection);
-				stabilizationDirection.Scale(new Vector3 (1, 1, 0));
-				Vector3 stabilization = ((float)(Math.Exp (-distance))) * stabilizationDirection * attractionForce / 2;
+				// stabilizationDirection.Scale(stabilizationDirection);
+				stabilizationDirection.Scale(new Vector3 (1, 1, 0.5f));
+				Vector3 stabilization = ((float)(Math.Exp(-Math.Sqrt(distance / 3f)))) * stabilizationDirection * attractionForce * velocity * ((float)  Math.Sqrt(velocity)) / 5.0f;
 				rb.AddForce(attraction + stabilization + massAttenuationForce, ForceMode.Force);
 
             }

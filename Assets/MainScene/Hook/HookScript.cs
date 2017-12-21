@@ -6,56 +6,75 @@ using Hook;
 
 namespace Hook
 {
-    public class HookScript : MonoBehaviour
-    {
-        public GameObject attractedObject;
-        public GameObject chain;
-        public GameObject dotPointer;
-        public GameObject hookChainSpawnPoint;
+	public class HookScript : MonoBehaviour
+	{
+		public GameObject attractedObject;
+		public GameObject chain;
+		public GameObject dotPointer;
+		public GameObject hookChainSpawnPoint;
 		public GameObject vibrationManager;
-        public string side;
+		public GameObject minimap;
+		public string side;
 
-        private GameObject currentDotPointer;
-        public GameObject currentChain;
+		private AudioSource source;
 
-        // Use this for initialization
-        void Start()
-        {
-            currentDotPointer = Instantiate(dotPointer);
-        }
+		private GameObject currentDotPointer;
+		public GameObject currentChain;
 
-        void Print(string s)
-        {
-            MonoBehaviour.print("HookScript " + side + " " + s);
-        }
+		// Use this for initialization
+		void Start()
+		{
+			currentDotPointer = Instantiate(dotPointer);
+			source = GetComponent<AudioSource> ();
+		}
 
-        // Update is called once per frame
-        void Update()
-        {
-            debugInputs();
-            Vector3 direction = transform.TransformDirection(Vector3.forward);
-            Transform spawnPointTransform = hookChainSpawnPoint.transform;
+		void Print(string s)
+		{
+			MonoBehaviour.print("HookScript " + side + " " + s);
+		}
 
-            RaycastHit hit;
-            if (Physics.Raycast(spawnPointTransform.position, direction, out hit))
-            {
+		// Update is called once per frame
+		void Update()
+		{
+			debugInputs();
+			Vector3 direction = transform.TransformDirection(Vector3.forward);
+			Transform spawnPointTransform = hookChainSpawnPoint.transform;
+
+			if (side == "Left" && Input.GetButtonDown("LeftTrackpad"))
+			{
+				Print ("Show/Hide map");
+				if (minimap.activeSelf) {
+					minimap.SetActive (false);
+				} else {
+					minimap.SetActive (true);
+				};
+			}
+
+			if (side == "Right" && Input.GetButtonDown("RightTrackpad"))
+			{
+				attractedObject.GetComponent<Rigidbody> ().AddForce (-direction.normalized * 50, ForceMode.Impulse);
+			}
+
+			RaycastHit hit;
+			if (Physics.Raycast(spawnPointTransform.position, direction, out hit))
+			{
 				Print("Raycast hit, distance : " + hit.distance + " pos : " + hit.point);
 
-                currentDotPointer.SetActive(true);
-                currentDotPointer.transform.position = hit.point;
+				currentDotPointer.SetActive(true);
+				currentDotPointer.transform.position = hit.point;
 
 				if (Input.GetButtonDown(side + "Trigger"))
-                {
-                    Print("Chain launched");
-                    if (currentChain != null)
-                    {
-                        Destroy(currentChain);
-                    }
+				{
+					Print("Chain launched");
+					if (currentChain != null)
+					{
+						Destroy(currentChain);
+					}
+					source.Play ();
+					createChain(hit);
+				}
 
-                    createChain(hit);
-                }
-
-				if (Input.GetButtonDown(side + "Trackpad"))
+				if (Input.GetButtonDown("RightTrackpad"))
 				{
 					Print ("Object push try");
 					Rigidbody rb = hit.rigidbody;
@@ -65,50 +84,51 @@ namespace Hook
 					} else {
 						Print ("Object push fail");
 					}
-					// attractedObject.GetComponent<Rigidbody> ().AddForce (-direction.normalized * 100, ForceMode.Impulse);
+					attractedObject.GetComponent<Rigidbody> ().AddForce (-direction.normalized * 500, ForceMode.Impulse);
 				}
 
-                if (Input.GetAxis(side + "Grip") == 1.0f)
-                {
-                    Print("Grip detected");
+
+				if (Input.GetAxis(side + "Grip") == 1.0f)
+				{
+					Print("Grip detected");
 					Rigidbody rb = hit.rigidbody;
 					if (rb != null && hit.distance <= 1) {
 						vibrationManager.GetComponent<OVRVibration> ().VibrateController (side == "Right" ? VRNode.RightHand : VRNode.LeftHand, 1, 200);
 					}
 				}
-            }
-            else
-            {
-                currentDotPointer.SetActive(false);
-            }
-        }
+			}
+			else
+			{
+				currentDotPointer.SetActive(false);
+			}
+		}
 
-        void createChain(RaycastHit hit)
-        {
-            Debug.Log("Instantiating chain");
-            Transform spawnPointTransform = hookChainSpawnPoint.transform;
-            currentChain = Instantiate(chain, spawnPointTransform.position, spawnPointTransform.rotation);
-            HookChainScript hookChainScript = currentChain.GetComponent<HookChainScript>();
-            hookChainScript.destination = hit.point;
-            hookChainScript.attractedObject = attractedObject;
-        }
+		void createChain(RaycastHit hit)
+		{
+			Debug.Log("Instantiating chain");
+			Transform spawnPointTransform = hookChainSpawnPoint.transform;
+			currentChain = Instantiate(chain, spawnPointTransform.position, spawnPointTransform.rotation);
+			HookChainScript hookChainScript = currentChain.GetComponent<HookChainScript>();
+			hookChainScript.destination = hit.point;
+			hookChainScript.attractedObject = attractedObject;
+		}
 
-        void debugInputs()
-        {
+		void debugInputs()
+		{
 
-            if (Input.GetButtonDown(side + "Trigger"))
-            {
-                Print("Trigger detected");
-            }
-            if (Input.GetButtonDown(side + "Trackpad"))
-            {
-                Print("Trackpad detected");
-            }
-            if (Input.GetAxis(side + "Grip") == 1.0f)
-            {
-                Print("Axis detected");
+			if (Input.GetButtonDown(side + "Trigger"))
+			{
+				Print("Trigger detected");
+			}
+			if (Input.GetButtonDown(side + "Trackpad"))
+			{
+				Print("Trackpad detected");
+			}
+			if (Input.GetAxis(side + "Grip") == 1.0f)
+			{
+				Print("Axis detected");
 
-            }
-        }
-    }
+			}
+		}
+	}
 }
